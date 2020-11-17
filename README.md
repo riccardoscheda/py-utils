@@ -2,7 +2,7 @@
 Repository for cool python and AI stuff
 
 ## Ubuntu configuration 
-Ubuntu configuration
+ - Ubuntu configuration [ubuntu-config](https://github.com/riccardoscheda/py-utils/tree/main/ubuntu-config)
 
 ## Federated learning
 
