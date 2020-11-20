@@ -8,4 +8,6 @@ Repository for cool python and AI stuff
 
 - Distributed learning with [socket](https://github.com/riccardoscheda/py-utils/tree/main/federated-learning/socket)
 
+## Plotting
 
+- plotting with bokeh [covid_plot](https://github.com/riccardoscheda/py-utils/tree/main/covid%20plot)
