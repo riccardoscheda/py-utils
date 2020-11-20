@@ -10,4 +10,4 @@ Repository for cool python and AI stuff
 
 ## Plotting
 
-- plotting with bokeh [covid_plot](https://github.com/riccardoscheda/py-utils/tree/main/covid%20plot)
+- plotting with bokeh [covid-plot](https://github.com/riccardoscheda/py-utils/tree/main/covid%20plot)
