@@ -19,7 +19,15 @@ def get_dataset(src, name):
 			        "RegionCode": str},
 			 error_bad_lines=False)
 	df["DailyChangeConfirmedCases"] = df.groupby(["CountryName"]).ConfirmedCases.diff().fillna(0)
+	
+	pred = pd.read_csv("covid-plot/data/predictions.csv", parse_dates=['Date'],
+			 encoding="ISO-8859-1",
+			 dtype={"RegionName": str,
+			        "RegionCode": str},
+			 error_bad_lines=False)
+	df = pd.concat([pred, df])
 	df = df[df["CountryName"]== select.value]
+	#df = pd.merge(df, pred, on=['CountryName',"RegionName","Date"])
 	return ColumnDataSource(data=df)
 
 def make_plot(source, title):
@@ -28,6 +36,7 @@ def make_plot(source, title):
 
     #plot.line("Date","ConfirmedCases",source=source)
     plot.line("Date","DailyChangeConfirmedCases",source=source)
+    plot.line("Date","PredictedDailyNewCases",source=source,color="orange")
     # fixed attributes
 
     return plot
@@ -60,4 +69,4 @@ plot = make_plot(source, "Daily Cases for " + select.value)
 controls = column(select)
 
 curdoc().add_root(row( controls,plot))
-curdoc().title = "Weather"
+curdoc().title = "Covid"
