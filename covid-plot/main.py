@@ -20,14 +20,15 @@ def get_dataset(src, name):
 			 error_bad_lines=False)
 	df["DailyChangeConfirmedCases"] = df.groupby(["CountryName"]).ConfirmedCases.diff().fillna(0)
 	
-	pred = pd.read_csv("covid-plot/data/predictions.csv", parse_dates=['Date'],
+	pred = pd.read_csv("covid-plot/data/lstmpredictions.csv", parse_dates=['Date'],
 			 encoding="ISO-8859-1",
 			 dtype={"RegionName": str,
 			        "RegionCode": str},
 			 error_bad_lines=False)
 	df = pd.concat([pred, df])
-	df = df[df["CountryName"]== select.value]
-	#df = pd.merge(df, pred, on=['CountryName',"RegionName","Date"])
+	df["RegionName"] = df["RegionName"].fillna("--")
+	df = df[(df["CountryName"]==select.value) & (df["RegionName"] == region.value)]
+	#df["RegionName"]
 	return ColumnDataSource(data=df)
 
 def make_plot(source, title):
@@ -45,12 +46,11 @@ def update_plot(attrname, old, new):
     
     plot.title.text = "Daily Cases for " + select.value
 
-    src = get_dataset(df, df[df["CountryName"]==select.value]['ConfirmedCases'])
+    src = get_dataset(df[(df["CountryName"]==select.value) & (df["RegionName"] == region.value)]['ConfirmedCases'], df[(df["CountryName"]==select.value) & (df["RegionName"] == region.value)]['ConfirmedCases'])
     source.data.update(src.data)
 
 city = 'Italy'
-	
-
+region = "--"
 
 df = pd.read_csv('covid-plot/data/data.csv',
 	          parse_dates=['Date'],
@@ -60,13 +60,16 @@ df = pd.read_csv('covid-plot/data/data.csv',
 			 error_bad_lines=False)
 options = list(np.unique(df["CountryName"]))
 select = Select(value="Italy", title='Country', options=options)
+df["RegionName"] = df["RegionName"].fillna("--")
+regions = df["RegionName"].unique()
 
-source = get_dataset(df[df["CountryName"]== select.value],select.value)
-
+region = Select(value=region,title="Region",options=list(regions))
+source = get_dataset(df[(df["CountryName"]== select.value) & (df["RegionName"]==region.value)],select.value)
+region.on_change('value',update_plot)
 select.on_change('value', update_plot)
 plot = make_plot(source, "Daily Cases for " + select.value)
 
-controls = column(select)
+controls = column(select,region)
 
-curdoc().add_root(row( controls,plot))
+curdoc().add_root(row(controls,plot))
 curdoc().title = "Covid"
