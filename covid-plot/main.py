@@ -6,10 +6,19 @@ from scipy.signal import savgol_filter
 
 from bokeh.io import curdoc
 from bokeh.layouts import column, row
-from bokeh.models import ColumnDataSource, DataRange1d, Select
+from bokeh.models import ColumnDataSource, DataRange1d, Select,HoverTool, HBar
+from bokeh.palettes import GnBu3, OrRd3
 from bokeh.palettes import Blues4
 from bokeh.plotting import figure
 import numpy as np
+from datetime import date
+
+from bokeh.io import output_file, show
+from bokeh.models import (BasicTicker, ColorBar, ColumnDataSource,
+                          LinearColorMapper, PrintfTickFormatter)
+from bokeh.plotting import figure
+from bokeh.sampledata.unemployment1948 import data
+from bokeh.transform import transform
 
 def get_dataset(src, name):
 	df = pd.read_csv('covid-plot/data/data.csv',
@@ -19,7 +28,7 @@ def get_dataset(src, name):
 			        "RegionCode": str},
 			 error_bad_lines=False)
 	df["DailyChangeConfirmedCases"] = df.groupby(["CountryName"]).ConfirmedCases.diff().fillna(0)
-	
+
 	pred = pd.read_csv("covid-plot/data/lstmpredictions.csv", parse_dates=['Date'],
 			 encoding="ISO-8859-1",
 			 dtype={"RegionName": str,
@@ -28,26 +37,55 @@ def get_dataset(src, name):
 	df = pd.concat([pred, df])
 	df["RegionName"] = df["RegionName"].fillna("--")
 	df = df[(df["CountryName"]==select.value) & (df["RegionName"] == region.value)]
-	#df["RegionName"]
+	df["Date2"] = df["Date"].astype(str)
+	df[interventions].fillna(0)
 	return ColumnDataSource(data=df)
 
-def make_plot(source, title):
-    plot = figure(x_axis_type="datetime", plot_width=800, tools="", toolbar_location=None)
+def make_plot(source,df, title, title2):
+    plot = figure(x_axis_type="datetime", plot_width=1500, tools="", toolbar_location="above")
     plot.title.text = title
 
     #plot.line("Date","ConfirmedCases",source=source)
-    plot.line("Date","DailyChangeConfirmedCases",source=source)
-    plot.line("Date","PredictedDailyNewCases",source=source,color="orange")
-    # fixed attributes
+    plot.line("Date","PredictedDailyNewCases",source=source,line_width=3,color="orange")
+    plot.line("Date","DailyChangeConfirmedCases",source=source,line_width=3)
+    ################### INTERVENTIONS #########################
+    
+    colors = ['#440154', '#30678D', '#35B778', '#FDE724']
+    mapper = LinearColorMapper(palette=colors, low=df["C1_School closing"].min(), high=df["C2_Workplace closing"].max())
 
-    return plot
+    graph = figure(plot_width=1500, plot_height=600, title="Interventions",
+           x_range=dates, y_range=interventions,
+           toolbar_location=None, tools="", x_axis_location=None)
+    
+    for i,j in enumerate(interventions):
+      graph.rect(x="Date2", y=i, width=1.3, height=0.8, source=source,
+      line_color=None, fill_color=transform(j, mapper))
+
+    color_bar = ColorBar(color_mapper=mapper, location=(0, 0),
+                     ticker=BasicTicker(desired_num_ticks=len(colors)))
+
+    graph.add_layout(color_bar, 'right')
+
+    graph.axis.axis_line_color = None
+    graph.axis.major_tick_line_color = None
+    graph.axis.major_label_text_font_size = "10px"
+    graph.axis.major_label_standoff = 0
+    #graph.xaxis.major_label_orientation = 1.2
+    graph.outline_line_color = None
+    graph.xgrid.grid_line_color = None
+
+    graph.title.text = title2
+
+    return plot,graph
 
 def update_plot(attrname, old, new):
-    
-    plot.title.text = "Daily Cases for " + select.value
 
+    plot.title.text = "Daily Cases for " + select.value
+    graph.title.text = "Interventions for " + select.value
+    
     src = get_dataset(df[(df["CountryName"]==select.value) & (df["RegionName"] == region.value)]['ConfirmedCases'], df[(df["CountryName"]==select.value) & (df["RegionName"] == region.value)]['ConfirmedCases'])
     source.data.update(src.data)
+
 
 city = 'Italy'
 region = "--"
@@ -58,6 +96,9 @@ df = pd.read_csv('covid-plot/data/data.csv',
 			 dtype={"RegionName": str,
 			        "RegionCode": str},
 			 error_bad_lines=False)
+			 
+interventions = list(df.columns[6:20])
+dates = list(df["Date"].astype(str).unique())
 options = list(np.unique(df["CountryName"]))
 select = Select(value="Italy", title='Country', options=options)
 df["RegionName"] = df["RegionName"].fillna("--")
@@ -67,9 +108,13 @@ region = Select(value=region,title="Region",options=list(regions))
 source = get_dataset(df[(df["CountryName"]== select.value) & (df["RegionName"]==region.value)],select.value)
 region.on_change('value',update_plot)
 select.on_change('value', update_plot)
-plot = make_plot(source, "Daily Cases for " + select.value)
+plot, graph = make_plot(source,df, "Daily Cases for " + select.value, "Interventions for " + select.value)
+plot.add_tools(HoverTool(tooltips=[("Confirmed Cases:", "@ConfirmedCases"),
+				("Predicted Cases:", "@PredictedDailyNewCases"),
+				("Date","@Date{%F}")],
+				formatters={'@Date': 'datetime'}))
 
 controls = column(select,region)
-
-curdoc().add_root(row(controls,plot))
+graphs = column(plot,graph)
+curdoc().add_root(row(controls,graphs))
 curdoc().title = "Covid"
