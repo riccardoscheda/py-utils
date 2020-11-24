@@ -20,8 +20,18 @@ from bokeh.plotting import figure
 from bokeh.sampledata.unemployment1948 import data
 from bokeh.transform import transform
 
+DATA_URL = 'https://raw.githubusercontent.com/OxCGRT/covid-policy-tracker/master/data/OxCGRT_latest.csv'
+df = pd.read_csv(DATA_URL,
+		  parse_dates=['Date'],
+		 encoding="ISO-8859-1",
+		 dtype={"RegionName": str,
+		        "RegionCode": str},
+		 error_bad_lines=False)
+df.to_csv("covid-plot/data/data.csv")
+
+
 def get_dataset(src, name):
-	df = pd.read_csv('covid-plot/data/data.csv',
+	df = pd.read_csv("covid-plot/data/data.csv",
 			  parse_dates=['Date'],
 			 encoding="ISO-8859-1",
 			 dtype={"RegionName": str,
@@ -48,6 +58,8 @@ def make_plot(source,df, title, title2):
     #plot.line("Date","ConfirmedCases",source=source)
     plot.line("Date","PredictedDailyNewCases",source=source,line_width=3,color="orange")
     plot.line("Date","DailyChangeConfirmedCases",source=source,line_width=3)
+    plot.line(x=[current_time,current_time], y=[-10,50000], color="#FB8072", line_width=4, line_alpha =0.6, line_dash="dashed")
+
     ################### INTERVENTIONS #########################
     
     colors = ['#440154', '#30678D', '#35B778', '#FDE724']
@@ -58,8 +70,8 @@ def make_plot(source,df, title, title2):
            toolbar_location=None, tools="", x_axis_location=None)
     
     for i,j in enumerate(interventions):
-      graph.rect(x="Date2", y=i, width=1.3, height=0.8, source=source,
-      line_color=None, fill_color=transform(j, mapper))
+      graph.rect(x="Date2", y=i, width=1., height=0.8, source=source,
+       line_color = transform(j, mapper),fill_color=transform(j, mapper))
 
     color_bar = ColorBar(color_mapper=mapper, location=(0, 0),
                      ticker=BasicTicker(desired_num_ticks=len(colors)))
@@ -73,7 +85,7 @@ def make_plot(source,df, title, title2):
     #graph.xaxis.major_label_orientation = 1.2
     graph.outline_line_color = None
     graph.xgrid.grid_line_color = None
-
+    graph.line(x=[df["Date2"].iloc[-1],df["Date2"].iloc[-1]], y=["C1_School closing", "C7_Flag"], color="#FB8072", line_width=4, line_alpha =0.9, line_dash="dashed")
     graph.title.text = title2
 
     return plot,graph
@@ -90,7 +102,7 @@ def update_plot(attrname, old, new):
 city = 'Italy'
 region = "--"
 
-df = pd.read_csv('covid-plot/data/data.csv',
+df = pd.read_csv("covid-plot/data/data.csv",
 	          parse_dates=['Date'],
 			 encoding="ISO-8859-1",
 			 dtype={"RegionName": str,
@@ -103,7 +115,11 @@ options = list(np.unique(df["CountryName"]))
 select = Select(value="Italy", title='Country', options=options)
 df["RegionName"] = df["RegionName"].fillna("--")
 regions = df["RegionName"].unique()
-
+df["Date2"] = df["Date"].astype(str)
+from datetime import datetime
+now = datetime.now()
+#current_time = now.strftime("%y:%m:%d")
+current_time = df["Date"].iloc[-1]
 region = Select(value=region,title="Region",options=list(regions))
 source = get_dataset(df[(df["CountryName"]== select.value) & (df["RegionName"]==region.value)],select.value)
 region.on_change('value',update_plot)
@@ -113,6 +129,8 @@ plot.add_tools(HoverTool(tooltips=[("Confirmed Cases:", "@ConfirmedCases"),
 				("Predicted Cases:", "@PredictedDailyNewCases"),
 				("Date","@Date{%F}")],
 				formatters={'@Date': 'datetime'}))
+				
+graph.add_tools(HoverTool(tooltips=[("Date:","@Date2")]))
 
 controls = column(select,region)
 graphs = column(plot,graph)
