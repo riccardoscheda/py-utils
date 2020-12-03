@@ -1,7 +1,6 @@
 # Install CUDA, cudaToolkit and CuDNN 
 
-For explanations see the guide:
-[](https://medium.com/@stephengregory_69986/installing-cuda-10-1-on-ubuntu-20-04-e562a5e724a0)
+For explanations see this [guide](https://medium.com/@stephengregory_69986/installing-cuda-10-1-on-ubuntu-20-04-e562a5e724a0)
 
 ## 1. Clean up
 ```
