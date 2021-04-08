@@ -19,3 +19,4 @@ just some interesting resources and libraries
 - [The art of Command Line](https://github.com/jlevy/the-art-of-command-line): Master the command line
 - [WTF python](https://github.com/satwikkansal/wtfpython): Learn some python with surprising snippets
 - [imutils](https://github.com/jrosebr1/imutils): make common image operation easier with OpenCV and Python3
+- [Flameshot](https://github.com/flameshot-org/flameshot): Free open-source screenshot utility
