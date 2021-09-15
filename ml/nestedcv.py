@@ -70,6 +70,9 @@ class NestedCV(object):
     def model_name(self) -> str:
         return str(model).split('(')[0]
 
+    def get_scores(self) -> pd.DataFrame:
+        return self.scores
+
     def fit(self, X, y) -> pd.DataFrame:
 
         scores = cross_validate(self.gcv, X=X, y=y, scoring=self.scoring, cv=self.outer_cv, n_jobs=self.n_jobs)
@@ -81,9 +84,12 @@ class NestedCV(object):
         if self.rnd_state:
             scores['rnd_state'] = [self.rnd_state] * self.outer_splits
 
-        scores = pd.DataFrame(scores)
+        scores['n_samples_tot'] = [len(X)] * self.outer_splits
+        scores['n_samples_split'] = [len(X) / self.outer_splits] * self.out_splits
 
-        return scores
+        self.scores = pd.DataFrame(scores)
+
+        return self.scores
 
 
 if __name__ == '__main__':

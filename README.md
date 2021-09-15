@@ -12,6 +12,10 @@ Repository for cool python and AI stuff
 
 - Plotting with bokeh [covid-plot](https://github.com/riccardoscheda/py-utils/tree/main/covid-plot)
 
+## ml
+
+- Containers for all Machine Learning related code (installable package)
+
 ## Interesting Resources
 
 just some interesting resources and libraries
