@@ -73,6 +73,9 @@ class NestedCV(object):
     def get_scores(self) -> pd.DataFrame:
         return self.scores
 
+    def get_gcv(self) -> GridSearchCV:
+        return self.gcv
+
     def fit(self, X, y) -> pd.DataFrame:
 
         scores = cross_validate(self.gcv, X=X, y=y, scoring=self.scoring, cv=self.outer_cv, n_jobs=self.n_jobs)
@@ -85,7 +88,7 @@ class NestedCV(object):
             scores['rnd_state'] = [self.rnd_state] * self.outer_splits
 
         scores['n_samples_tot'] = [len(X)] * self.outer_splits
-        scores['n_samples_split'] = [len(X) / self.outer_splits] * self.out_splits
+        scores['n_samples_split'] = [len(X) // self.outer_splits] * self.outer_splits
 
         self.scores = pd.DataFrame(scores)
 
@@ -95,13 +98,24 @@ class NestedCV(object):
 if __name__ == '__main__':
 
     from sklearn.linear_model import Ridge
+    from sklearn.datasets import load_boston
 
     model = Ridge()
     params = {'alpha': [1, 2, 3, 4, 5, 6]}
 
-    obj = NestedCV(model=model, params=params,
+    obj = NestedCV(model=model,
+                   params=params,
                    scoring=['neg_mean_squared_error', 'neg_mean_absolute_error'],
+                   refit='neg_mean_squared_error',
+                   inner_splits=5,
+                   outer_splits=3,
+                   n_jobs=2,
                    rnd_state=1)
 
+    data = load_boston()
+
+    X = data['data']
+    y = data['target']
+
     score = obj.fit(X, y)
-    print(score)
+    score
