@@ -101,7 +101,7 @@ if __name__ == '__main__':
     from sklearn.datasets import load_boston
 
     model = Ridge()
-    params = {'alpha': [1, 2, 3, 4, 5, 6]}
+    params = {'alpha': [0.001, 0.01, 0.1, 0.5, 1]}
 
     obj = NestedCV(model=model,
                    params=params,
