@@ -50,7 +50,7 @@ class NestedCV(object):
                  inner_splits: int = 5,
                  outer_splits: int = 3,
                  n_jobs: int = 1,
-                 rnd_state: int = None):
+                 rnd_state=None):
 
         self.model = model
         self.scoring = scoring
