@@ -12,7 +12,7 @@ Repository for cool python and AI stuff
 
 - Plotting with bokeh [covid-plot](https://github.com/riccardoscheda/py-utils/tree/main/covid-plot)
 
-## ml
+## src/ml
 
 - Containers for all Machine Learning related code (installable package)
 
@@ -25,3 +25,4 @@ just some interesting resources and libraries
 - [imutils](https://github.com/jrosebr1/imutils): make common image operation easier with OpenCV and Python3
 - [Flameshot](https://github.com/flameshot-org/flameshot): Free open-source screenshot utility
 - [Shut - Shell Utility](https://github.com/Nico-Curti/shut): Automatic installer for many software for non-root users (cmake, miniconda3 most notably)
+- [mCoding](https://github.com/mCodingLLC/): very cool youtube channel with lot of programming and math related stuffs (also resource of test code of this repository)
