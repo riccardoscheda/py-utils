@@ -1,7 +1,7 @@
 # py-utils
 Repository for cool python and AI stuff
 
-![Tests](https://github.com/riccardoscheda/py-utils/blob/main/.github/workflows/tests.yml/badge.svg)
+![Tests](https://github.com/riccardoscheda/py-utils/actions/workflows/tests.yml/badge.svg)
 
 ## Ubuntu configuration
  - [Ubuntu-Configuration](https://github.com/riccardoscheda/py-utils/tree/main/ubuntu-config) with some common (and uncommon) installation tutorial
