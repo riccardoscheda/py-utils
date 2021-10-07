@@ -26,3 +26,6 @@ just some interesting resources and libraries
 - [Flameshot](https://github.com/flameshot-org/flameshot): Free open-source screenshot utility
 - [Shut - Shell Utility](https://github.com/Nico-Curti/shut): Automatic installer for many software for non-root users (cmake, miniconda3 most notably)
 - [mCoding](https://github.com/mCodingLLC/): very cool youtube channel with lot of programming and math related stuffs (also resource of test code of this repository)
+- [Tidy-Data](http://vita.had.co.nz/papers/tidy-data.pdf)
+- [Programming Course Python](https://unibodifabiophysics.github.io/programmingCourseDIFA/)
+- [Permutation Feature Iportances](https://explained.ai/rf-importance/index.html)
