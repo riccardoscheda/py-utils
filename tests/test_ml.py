@@ -1,4 +1,3 @@
-from ml.nestedcv import NestedCV
 import pytest
 
 

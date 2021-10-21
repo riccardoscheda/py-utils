@@ -61,7 +61,7 @@ class NestedCV(object):
         self.inner_cv = KFold(n_splits=inner_splits, shuffle=True, random_state=self.rnd_state)
         self.outer_cv = KFold(n_splits=outer_splits, shuffle=True, random_state=self.rnd_state)
 
-        self.gcv = GridSearchCV(model, params, cv=self.inner_cv, refit=refit, scoring=self.scoring, n_jobs=self.n_jobs)
+        self.gcv = GridSearchCV(model, params, cv=self.inner_cv, refit=refit, scoring=self.scoring, n_jobs=1)
 
     def get_scoring(self) -> list:
         return self.scoring
