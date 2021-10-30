@@ -31,3 +31,4 @@ just some interesting resources and libraries
 - [Tidy-Data](http://vita.had.co.nz/papers/tidy-data.pdf)
 - [Programming Course Python](https://unibodifabiophysics.github.io/programmingCourseDIFA/)
 - [Permutation Feature Importances](https://explained.ai/rf-importance/index.html)
+- [Data Science Project Structure](https://gist.github.com/ericmjl/27e50331f24db3e8f957d1fe7bbbe510)
