@@ -35,7 +35,7 @@ class NestedCV(object):
         number of outer splits for KFold
 
     n_jobs: int
-        number of workers. Passed to GridSearchCV and cross_validate function
+        number of workers. Passed to cross_validate function
 
     rnd_state: int
         random seed of the system
