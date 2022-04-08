@@ -38,12 +38,8 @@ def main():
 
         for ball in balls:
 
-            # Equation
-            #ball.pos = ball.pos + ball.v * dt
-           # ball.v = ball.v
-            ball.pos.x, ball.v.x = simplettic(ball.pos.x,ball.v.x,dt,gamma=0.05)
-            ball.pos.y, ball.v.y = simplettic(ball.pos.y,ball.v.y,dt,gamma=0.05)
-            ball.pos.z, ball.v.z = simplettic(ball.pos.z,ball.v.z,dt,gamma=0.05)
+            ball.pos, ball.v = simplettic(ball.pos, ball.v, dt, gamma=0.05)
+
             # Wall hitting check
             if not (side > ball.pos.x > -side):
                 ball.v.x = -ball.v.x
@@ -51,6 +47,6 @@ def main():
                 ball.v.y = -ball.v.y
             if not (side > ball.pos.z > -side):
                 ball.v.z = -ball.v.z
-            
+
 if __name__ == '__main__':
     main()

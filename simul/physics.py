@@ -1,4 +1,6 @@
-def phi(q,p,omega = 1.5):
+from vpython import vector
+
+def phi(q: vector, p: vector, omega: float = 1.5) -> tuple[vector]:
     """
     The vectorial field which generates the evolution in the pase space
     Parameters:
@@ -9,16 +11,18 @@ def phi(q,p,omega = 1.5):
 
     Return the derivative of the potential with respect to q.
     """
-    
-##################HARMONIC OSCILLATOR
-#    return p , -(q-2)*omega**2  
-################# DOUBLE WELL POTENTIAL
+
+    ##################HARMONIC OSCILLATOR
+    #    return p , -(q-2)*omega**2
+
+    ################# DOUBLE WELL POTENTIAL
     a = 1.7
     b = 0.7
+
     return p, -q
 
 
-def simplettic(q,p,dt,gamma=0,omega=0.5):
+def simplettic(q: vector, p: vector, dt: float, gamma: float=0, omega: float=0.5) -> tuple[vector]:
     """
     Simplettic integration method to obtain the evolution of the system
     Parameters:
@@ -32,7 +36,10 @@ def simplettic(q,p,dt,gamma=0,omega=0.5):
 
     """
 
-    #evolution of the coordinates q and p
-    evoq = q + phi(q,p + dt*phi(q, p)[1])[0]*dt
-    evop = p -gamma*p*dt + phi(q,p)[1]*dt 
+    p1, q1 = phi(q, p)
+
+    # evolution of the coordinates q and p
+    evoq = q + phi(q, p + dt * q1)[0] * dt
+    evop = p - gamma * p * dt + q1 * dt
+
     return evoq, evop
