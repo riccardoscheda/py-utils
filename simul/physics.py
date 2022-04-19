@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*
+
 from vpython import vector
 
 def phi(q: vector, p: vector, omega: float = 1.5) -> tuple[vector]:
@@ -22,7 +25,7 @@ def phi(q: vector, p: vector, omega: float = 1.5) -> tuple[vector]:
     return p, -q
 
 
-def simplettic(q: vector, p: vector, dt: float, gamma: float=0, omega: float=0.5) -> tuple[vector]:
+def simplettic(q: vector, p: vector, dt: float, gamma: float=0, omega: float=0.5) -> tuple[vector, vector]:
     """
     Simplettic integration method to obtain the evolution of the system
     Parameters:

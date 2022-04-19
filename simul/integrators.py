@@ -1,5 +1,8 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*
+
 from vpython import vector
-from potential import Potential
+from potentials import Potential
 
 
 def Integrator(object):
@@ -24,6 +27,8 @@ def Simplettic(Integrator):
 
         # evolution of the coordinates q and p
         evoq = q + V.phi(q, p + dt * q1)[0] * dt
+        # TODO: Unfortunately, gamma can't be a vector since the product
+        # between vectors is not implemented
         evop = p - gamma * p * dt + q1 * dt
 
         return evoq, evop
