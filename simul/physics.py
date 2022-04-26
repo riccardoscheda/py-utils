@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*
 
-from vpython import vector
+from vpython import vector, sphere
 
-def phi(q: vector, p: vector, omega: float = 1.5) -> tuple[vector]:
+def phi(q: vector, p: vector, omega: float=1.5) -> tuple[vector, vector]:
     """
     The vectorial field which generates the evolution in the pase space
     Parameters:
@@ -46,3 +46,12 @@ def simplettic(q: vector, p: vector, dt: float, gamma: float=0, omega: float=0.5
     evop = p - gamma * p * dt + q1 * dt
 
     return evoq, evop
+
+
+def gravity(obj1: sphere, obj2: sphere, G: float=0.1) -> vector:
+
+    d = obj1.pos - obj2.pos
+    dmag = d.mag
+    dhat = d / dmag
+
+    return - G * obj1.mass * obj2.mass / (dmag ** 2) * dhat

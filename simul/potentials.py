@@ -21,7 +21,5 @@ def HarmonicOscillator(Potential):
 
     @staticmethod
     def phi(p: vector, q: vector, omega: vector=vector(1.5, 1.5, 1.5)) -> tuple[vector]:
-
         omega_squared = vector(omega.x ** 2, omega.y ** 2, omega.z ** 2)
-
         return p, -(q - 2) * omega_squared
