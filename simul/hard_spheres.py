@@ -4,7 +4,7 @@
 import numpy as np
 from vpython import sphere, vector, color, rate
 
-from utils import build_box, check_wall_hit
+from box_utils import build_box, check_wall_hit
 
 
 def create_balls(N: int=1, r: float=.2) -> list[sphere]:

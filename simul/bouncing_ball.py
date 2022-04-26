@@ -5,7 +5,7 @@ import numpy as np
 from vpython import box, sphere, vector, color, rate, scene
 
 from physics import simplettic
-from utils import build_box, check_wall_hit
+from box_utils import build_box, check_wall_hit
 
 
 def create_balls(N: int=1) -> list:
