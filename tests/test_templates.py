@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import pandas as pd
 import pytest
 
 
@@ -30,7 +34,7 @@ def test_raised_error():
 def test_fixture(iris):
     # Here "iris" is a fixture (conftest.py) and is the same for all test
     # The function "iris" inside conftest.py will be called
-    assert iris
+    assert isinstance(iris, pd.DataFrame)
 
 
 # use capture_stdout fixture
